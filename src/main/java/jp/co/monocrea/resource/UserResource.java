@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jp.co.monocrea.entity.User;
 import jp.co.monocrea.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/users")
@@ -18,7 +19,11 @@ public class UserResource {
 
     @GET
     public List<User> getUsers() {
-        return userRepository.listAll();
+        List<User> users = userRepository.listAll();
+        if (users == null) {
+            return new ArrayList<>();
+        }
+        return users;
     }
 
     @POST
