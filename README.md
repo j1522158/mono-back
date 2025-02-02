@@ -4,63 +4,65 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
-## Running the application in dev mode
+## 技術スタック
 
-You can run your application in dev mode that enables live coding using:
+| 項目          | 使用技術         | バージョン     |
+|-------------|--------------|-----------|
+| **Backend** | Java         | 21        |
+|             | Quarkus      | 3.17.8    |
+|             | Panache(ORM) | 3.17.8(?) |
+| **DB**      | PostgreSQL   | 15.10     |
+| **Other**   | Maven        | 3.9.9     |
 
-```shell script
-./mvnw compile quarkus:dev
+## ディレクトリ構成
+
+```
+mono-back/
+├── pom.xml                                            # プロジェクトの設定ファイル
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── jp/
+│   │   │       └── co/
+│   │   │           └── monocrea/
+│   │   │               ├── entity/
+│   │   │               │   └── UserEntity.java        # エンティティ
+│   │   │               ├── resource/
+│   │   │               │   └── UserResource.java      # APIエンドポイント（RESTリソース）
+│   │   │               ├── repository/
+│   │   │               │   └── UserRepository.java    # リポジトリ（データアクセス）
+│   │   │               └── service/
+│   │   │                   └── UserService.java       # サービスロジック
+│   │   └── resources/
+│   │       ├── application.properties                 # 設定ファイル（データベース設定/CORS設定）
+│   │       └── db.migration/
+│   │           └── V1__***.sql                        # データベースの初期化SQL
+│   └── test/
+│       ├── java/
+│       │   └── jp/
+│       │       └── co/
+│       │           └── monocrea/
+│       │               └── resource/
+│       │                   └── UserResourceTest.java  # ユーザーリソースのテスト(未実装)
+│       └── resources/
+│           └── application.properties                 # テスト用設定ファイル
+└── target/                                            # ビルド成果物格納ディレクトリ
+
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+## 実行方法
 
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
-./mvnw package
+Docker起動
+```
+docker-compose up -d  
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+アプリケーション実行
+```
+mvn quarkus:dev
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
+postgreSQL ログイン
 ```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+docker exec -it quarkus_postgres psql -U quarkus -d quarkus_db
 ```
-
-You can then execute your native executable with: `./target/mono-back-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
