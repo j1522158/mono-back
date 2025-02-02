@@ -10,14 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Path("/users")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
-
     @Inject
     UserRepository userRepository;
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public List<User> getUsers() {
         List<User> users = userRepository.listAll();
         if (users == null) {
