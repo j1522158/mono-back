@@ -16,14 +16,12 @@ public class UserResource {
     UserService userService;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public List<User> getUsers() {
         return userService.getUsers();
     }
 
     @PUT
     @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(@PathParam("id") Long id, User updatedUser) {
         User updated = userService.updateUser(id, updatedUser);
         return Response.ok(updated).build();
